@@ -2,14 +2,16 @@ import { BASE_URL } from '../constants/Config';
 // import ProductModel from '../models/ProductModel';
 
 class ProductService {
-  static async fetchProducts() {
+  static async fetchProducts(offset = 0, limit = 10) {
     try {
-      const resultJSON = await fetch(`${BASE_URL}/products`);
+      const URL = `${BASE_URL}/products?offset=${offset}&limit=${limit}`;
+      console.log(URL);
+      const resultJSON = await fetch(URL);
       if (!resultJSON.ok) {
         throw new Error(`HTTP error! status: ${resultJSON.status}`);
       }
       // /** @type {ProductModel[]} */
-      // /** @type {import('../models/types.d.ts').ProductModel[]} */
+      /** @type {import('../models/types.d.ts').ProductModel[]} */
       const products = await resultJSON.json();
       return products;
     } catch (error) {

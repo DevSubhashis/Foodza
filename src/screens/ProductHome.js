@@ -1,22 +1,15 @@
-import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image, RefreshControl } from "react-native";
+// ProductHome.js
+import React from "react";
+import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import Error from '../component/Error';
-import ProductState from './ProductHomeViewModel';
+import useProductViewModel from "../screens/ProductHomeViewModel";
 
 const ProductHome = () => {
-
-    const products = ProductState().products;
-    const error = ProductState().error;
-    const [refresh, setRefresh] = useState(false);
-
-    const page = useRef(0);
-    let limit = 20;
-
-    const onEndReachCalled = useRef(false);
+    const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum } = useProductViewModel();
 
     const ProductItem = ({ item }) => (
         <View style={styles.productContainer}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image source={{ uri: item.images[0] }} style={styles.image} />
             <View style={styles.productDetails}>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.price}>${item.price}</Text>
@@ -24,48 +17,32 @@ const ProductHome = () => {
         </View>
     );
 
-    const lodadMoreData = () =>{
-        console.log("lodadMoreData");
-        page.current = page.current + 1;
-        // api call 
-        //https://abc.com/getProct?page=1&limit=20
-    }
-
-    const onRefresh = () => {
-        setRefresh(true);
-        // api call
-        setRefresh(false);
-    }
-
     return (
         <View style={styles.container}>
             {
                 !error ?
-                    <FlatList
-                        data={products}
-                        renderItem={({ item }) => <ProductItem item={item} />}
-                        contentContainerStyle={styles.list}
-                        keyExtractor={item => item.id}
-                        initialNumToRender={5}
-                        //ListEmptyComponent={<Error errorMessage={error}/>}
-                        onEndReached={()=>{
-                            // if(onEndReachCalled.current){
-                            //   lodadMoreData();
-                            // }
-                            lodadMoreData();
-                        }}
-                        onEndReachedThreshold={10}
-                        onRefresh={()=>{
-                            onRefresh();
-                        }}
-                        refreshing={refresh}
-                       
-                    /> : 
-                   <Error errorMessage={error}/>
+                    <View style={{ flex: 1 }} >
+                        <FlatList
+                            data={products}
+                            renderItem={({ item }) => <ProductItem item={item} />}
+                            contentContainerStyle={styles.list}
+                            keyExtractor={item => item.id}
+                            initialNumToRender={10}
+                            onMomentumScrollBegin={() => {
+                                // Prevent calling `loadMoreData` multiple times
+                                onEndReachedCalledDuringMomentum.current = false;
+                            }}
+                            onEndReached={loadMoreData}
+                            onEndReachedThreshold={0.1}
+                            onRefresh={onRefresh}
+                            refreshing={refresh}
+                        />
+                    </View>
+                    :
+                    <Error errorMessage={error} />
             }
-
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({

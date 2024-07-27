@@ -3,5 +3,5 @@ export interface ProductModel {
     title: string
     description: boolean
     price: double
-    image: string
+    images: string[]
 }
