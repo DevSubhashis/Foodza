@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ProductService from "../service/ProductService";
 
-const useProductViewModel = () => {
+const ProductHomeViewModel = () => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(false);
@@ -63,4 +63,4 @@ const useProductViewModel = () => {
     };
 };
 
-export default useProductViewModel;
+export default ProductHomeViewModel;

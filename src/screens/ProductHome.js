@@ -2,10 +2,10 @@
 import React from "react";
 import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import Error from '../component/Error';
-import useProductViewModel from "../screens/ProductHomeViewModel";
+import ProductHomeViewModel from "../screens/ProductHomeViewModel";
 
 const ProductHome = () => {
-    const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum } = useProductViewModel();
+    const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum } = ProductHomeViewModel();
 
     const ProductItem = ({ item }) => (
         <View style={styles.productContainer}>
