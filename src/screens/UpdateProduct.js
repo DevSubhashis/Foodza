@@ -22,7 +22,7 @@ const UpdateProduct = () => {
                         borderColor: 'red',
                         borderWidth: 1,
                         padding: 10,
-                        borderRadius:10
+                        borderRadius: 10
                     }}
                 />
             </View>
@@ -39,7 +39,7 @@ const UpdateProduct = () => {
                         borderColor: 'red',
                         borderWidth: 1,
                         padding: 10,
-                        borderRadius:10
+                        borderRadius: 10
                     }}
                     onChangeText={(value) => {
                         console.log(value);
@@ -51,13 +51,19 @@ const UpdateProduct = () => {
 
             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                 <Button
-                    text="Submit"
+                    title="Submit"
                     onPress={() => { }}
+                    style={styles.addButtonStyle}
+                    textStyle={styles.addTextStyle}
                 />
-                <Spacer size={10} horizontal/>
+                <Spacer size={10} horizontal />
                 <Button
-                    text="Cancel"
-                    onPress={() => { }}
+                    title="Cancel"
+                    onPress={() => {
+
+                    }}
+                    style={styles.cancelButtonStyle}
+                    textStyle={styles.cancelTextStyle}
                 />
             </View>
 
@@ -72,7 +78,25 @@ const styles = StyleSheet.create({
     },
     fieldContainer: {
         padding: 20
-    }
+    },
+    addButtonStyle: {
+        backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+    addTextStyle: {
+        fontSize: 16,
+        color: 'yellow',
+    },
+    cancelButtonStyle: {
+        backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+    },
+    cancelTextStyle: {
+        fontSize: 16,
+        color: '#fff',
+    },
 })
 
 export default UpdateProduct;
