@@ -1,6 +1,7 @@
 // ProductViewModel.js
 import React, { useState, useRef, useEffect } from "react";
 import ProductService from "../service/ProductService";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ProductHomeViewModel = () => {
     const [products, setProducts] = useState([]);
@@ -29,10 +30,12 @@ const ProductHomeViewModel = () => {
         }
     };
 
-    useEffect(() => {
-        fetchData();
-    }, []);
-
+    useFocusEffect( 
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
+    
     const loadMoreData = () => {
         if (!onEndReachedCalledDuringMomentum.current) {
             offset.current = offset.current + limit;

@@ -1,40 +1,38 @@
 // ProductHome.js
 import React from "react";
-import { SafeAreaView, View, Text, StyleSheet, FlatList, Image } from "react-native";
+import { SafeAreaView, View, StyleSheet, FlatList } from "react-native";
 import Error from '../component/Error';
 import ProductHomeViewModel from "../screens/ProductHomeViewModel";
 import Header from '../component/Header';
 import { useNavigation } from "@react-navigation/native";
+import ProductItem from '../component/ProductItem';
 
 const ProductHome = () => {
     const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum } = ProductHomeViewModel();
     const navigate = useNavigation();
 
-    const ProductItem = ({ item }) => (
-        <View style={styles.productContainer}>
-            <Image source={{ uri: item.images[0] }} style={styles.image} />
-            <View style={styles.productDetails}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.price}>${item.price}</Text>
-            </View>
-        </View>
-    );
 
     const navigateToUpdatePage = () => {
+        navigate.push('UpdateProduct');
+    }
+
+    const onEditPress = (item) => {
         navigate.push('UpdateProduct', {
-            isAdd: true
+            productID: item.id
         });
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header title={"Product List"} onPress={navigateToUpdatePage} addButton/>
+            <Header title={"Product List"} onPress={navigateToUpdatePage} addButton />
             {
                 !error ?
                     <View style={{ flex: 1 }} >
                         <FlatList
                             data={products}
-                            renderItem={({ item }) => <ProductItem item={item} />}
+                            renderItem={({ item }) => <ProductItem item={item} onEditPress={() => {
+                                onEditPress(item);
+                            }} />}
                             contentContainerStyle={styles.list}
                             keyExtractor={item => item.id}
                             initialNumToRender={10}
@@ -62,38 +60,6 @@ const styles = StyleSheet.create({
     },
     list: {
         padding: 10,
-    },
-    productContainer: {
-        flexDirection: 'row',
-        padding: 10,
-        marginBottom: 10,
-        borderRadius: 5,
-        backgroundColor: '#fff',
-        shadowColor: "#000",
-        shadowOpacity: 0.1,
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowRadius: 5,
-        elevation: 2
-    },
-    productDetails: {
-        flex: 1
-    },
-    image: {
-        width: 100,
-        height: 100,
-        borderRadius: 5,
-        marginRight: 10
-    },
-    title: {
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
-    price: {
-        fontSize: 14,
-        color: "#6200ee"
     }
 })
 
