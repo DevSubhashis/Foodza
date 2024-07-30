@@ -1,11 +1,14 @@
 // ProductHome.js
 import React from "react";
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
+import { SafeAreaView, View, Text, StyleSheet, FlatList, Image } from "react-native";
 import Error from '../component/Error';
 import ProductHomeViewModel from "../screens/ProductHomeViewModel";
+import Header from '../component/Header';
+import { useNavigation } from "@react-navigation/native";
 
 const ProductHome = () => {
     const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum } = ProductHomeViewModel();
+    const navigate = useNavigation();
 
     const ProductItem = ({ item }) => (
         <View style={styles.productContainer}>
@@ -17,8 +20,15 @@ const ProductHome = () => {
         </View>
     );
 
+    const navigateToUpdatePage = () => {
+        navigate.push('UpdateProduct', {
+            isAdd: true
+        });
+    }
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <Header title={"Product List"} onPress={navigateToUpdatePage} addButton/>
             {
                 !error ?
                     <View style={{ flex: 1 }} >
@@ -41,7 +51,7 @@ const ProductHome = () => {
                     :
                     <Error errorMessage={error} />
             }
-        </View>
+        </SafeAreaView>
     );
 }
 

@@ -1,12 +1,20 @@
 import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import ProductHome from './src/screens/ProductHome';
+import UpdateProduct from './src/screens/UpdateProduct';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Stack = createStackNavigator()
 
 const App = () => {
-    return(
-        <SafeAreaView style={styles.container}>
-            <ProductHome />
-        </SafeAreaView>
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="ProductHome">
+                <Stack.Screen name="ProductHome" component={ProductHome} options={{ headerShown: false }} />
+                <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
+            </Stack.Navigator>
+        </NavigationContainer>
     )
 }
 
