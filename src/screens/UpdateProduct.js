@@ -1,18 +1,17 @@
 // UpdateProduct.js
-import React from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, { useEffect } from "react";
+import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import Header from '../component/Header';
 import Spacer from '../component/Spacer';
 import Button from '../component/Button';
 import UpdateProductHomeViewModel from './UpdateProductHomeViewModel';
 import { useRoute } from '@react-navigation/native';
+import Loader from '../component/Loader';
 
 const UpdateProduct = () => {
     const route = useRoute();
 
     const {
-        productID,
-        setProductID,
         title,
         setTitle,
         price,
@@ -22,15 +21,54 @@ const UpdateProduct = () => {
         errors,
         priceRef,
         handleSubmit,
-        handleImagePick
+        handleImagePick,
+        handleCancel,
+        showLoader
     } = UpdateProductHomeViewModel();
+
+    const {
+        id: productID = null,
+        title: productTitle = '',
+        description: productDescription = '',
+        price: productPrice = 0,
+        images: productImages = []
+    } = route?.params?.product || {};
+
+    useEffect(() => {
+        if (productID) {
+            setTitle(productTitle);
+            setPrice(String(productPrice));
+            if (productImages.length > 0) {
+                setImage({ uri: productImages[0] });
+            }
+        }
+    }, []);
+
+    const showAlertConfrimation = () =>
+        Alert.alert(
+            'Delete',
+            'Are you sure?',
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => { },
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        // perfrm delete
+                        setImage(null);
+                    },
+                }
+            ]
+        );
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header title={"Add Product"} onPress={() => { }} />
+            <Header title={productID ? "Edit Product" : "Add Product"} onPress={() => { }} />
 
             <View style={styles.fieldContainer}>
-                <Text>ProductID: {route.params?.productID}</Text>
                 <Text>Title</Text>
                 <Spacer size={10} />
                 <TextInput
@@ -44,7 +82,7 @@ const UpdateProduct = () => {
                     maxLength={30}
                     onSubmitEditing={() => {
                         // focus next field 
-                        //priceRef.current.focus();
+                        priceRef.current.focus();
                     }}
                 />
                 {errors.title && <Text style={styles.errorsText}>{errors.title}</Text>}
@@ -71,15 +109,15 @@ const UpdateProduct = () => {
                 <Spacer size={10} />
                 <View style={styles.imageContainer}>
                     <View style={styles.image} >
+                        <Image source={image ? image : require('../assets/images/noimage.png')} style={styles.image} />
                         {
                             image &&
-                            <TouchableOpacity style={{ top: 0, left: 0 }} onPress={() => {
-                                setImage(null)
+                            <TouchableOpacity style={{ position: 'absolute', top: -5, left: -5 }} onPress={() => {
+                                showAlertConfrimation();
                             }}>
                                 <Image color="red" source={require('../assets/images/delete.png')} style={{ width: 20, height: 20 }} />
                             </TouchableOpacity>
                         }
-                        <Image source={image ? image : require('../assets/images/noimage.png')} style={styles.image} />
                     </View>
 
                 </View>
@@ -114,14 +152,12 @@ const UpdateProduct = () => {
                 <Spacer size={10} horizontal />
                 <Button
                     title="Cancel"
-                    onPress={() => {
-
-                    }}
+                    onPress={handleCancel}
                     style={styles.cancelButtonStyle}
                     textStyle={styles.cancelTextStyle}
                 />
             </View>
-
+            <Loader visible={showLoader} />
         </SafeAreaView>
     );
 }
@@ -168,7 +204,7 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100,
-        boderRadius: 10
+        borderRadius: 10
     }
 })
 

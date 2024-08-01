@@ -12,6 +12,7 @@ const UpdateProductHomeViewModel = () => {
     const [errors, setErrors] = useState({});
     const priceRef = useRef(null);
     const navigation = useNavigation();
+    const [showLoader, setShowLoader] = useState(false);
 
     const handleValidation = () => {
         let valid = true;
@@ -32,6 +33,7 @@ const UpdateProductHomeViewModel = () => {
     }
 
     const handleSubmit = async () => {
+        setShowLoader(true);
         if (handleValidation()) {
             // from submitted
             const addProduct = await ProductService.addProduct({
@@ -41,6 +43,7 @@ const UpdateProductHomeViewModel = () => {
             });
             console.log(addProduct); // addProduct.id
             navigateToListPage();
+            setShowLoader(false);
         } else {
             Alert.alert("ERROR");
         }
@@ -48,6 +51,10 @@ const UpdateProductHomeViewModel = () => {
 
     const navigateToListPage = () => {
         navigation.navigate('ProductHome');
+    }
+
+    const handleCancel = () => {
+        navigation.goBack();
     }
 
     const handleImagePick = async (type) => {
@@ -62,6 +69,15 @@ const UpdateProductHomeViewModel = () => {
             } else if (result.errorCode) {
                 console.error("Error ", result.errorMessage);
             } else {
+
+                const fileSize = result.assets[0].fileSize; // bytes
+                const fileSizeMB = fileSize / (1024 * 1024); // MB
+
+                if (fileSizeMB > 2) {
+                    Alert.alert("File Size Error", "Plz select image lower than 2 MB");
+                    return;
+                }
+
                 const source = { uri: 'data:image/jpeg;base64,' + result.assets[0].base64 }
                 setImage(source);
                 uploadImage();
@@ -82,6 +98,7 @@ const UpdateProductHomeViewModel = () => {
         // upload image
     }
 
+
     return {
         title,
         setTitle,
@@ -93,7 +110,9 @@ const UpdateProductHomeViewModel = () => {
         setErrors,
         priceRef,
         handleSubmit,
-        handleImagePick
+        handleImagePick,
+        handleCancel,
+        showLoader
     }
 }
 

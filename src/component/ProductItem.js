@@ -13,7 +13,7 @@ const ProductItem = ({ item, onEditPress = ()=>{} , onDeletePress = ()=>{} }) =>
             <View style={{ flexDirection: 'row' }}>
                 <Button title={"Edit"}  onPress={onEditPress} imageSource={require('../assets/images/edit.png')}  />
                 <Spacer size={10} horizontal/>
-                <Button title={"Delete"}  styleonPress={onDeletePress} imageSource={require('../assets/images/delete.png')}  />
+                <Button title={"Delete"}  onPress={onDeletePress} imageSource={require('../assets/images/delete.png')}  />
             </View>
         </View>
     </View>
