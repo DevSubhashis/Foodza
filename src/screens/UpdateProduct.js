@@ -1,5 +1,5 @@
 // UpdateProduct.js
-import React, { useEffect } from "react";
+import React from "react";
 import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Header from '../component/Header';
 import Spacer from '../component/Spacer';
@@ -11,6 +11,8 @@ const UpdateProduct = () => {
     const route = useRoute();
 
     const {
+        productID,
+        setProductID,
         title,
         setTitle,
         price,
@@ -20,33 +22,15 @@ const UpdateProduct = () => {
         errors,
         priceRef,
         handleSubmit,
-        handleImagePick,
-        handleCancel
+        handleImagePick
     } = UpdateProductHomeViewModel();
-
-    const {
-        id: productID = null,
-        title: productTitle = '',
-        description: productDescription = '',
-        price: productPrice = 0,
-        images: productImages = [],
-    } = route?.params?.product || {};
-
-    useEffect(() => {
-        if (productID) {
-            setTitle(productTitle);
-            setPrice(String(productPrice));
-            if (productImages.length > 0) {
-                setImage({ uri: productImages[0] });
-            }
-        }
-    }, [productID, productTitle, productPrice, productImages, setTitle, setPrice, setImage]);
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header title={productID ? "Edit Product" : "Add Product"} onPress={() => { }} />
+            <Header title={"Add Product"} onPress={() => { }} />
 
             <View style={styles.fieldContainer}>
+                <Text>ProductID: {route.params?.productID}</Text>
                 <Text>Title</Text>
                 <Spacer size={10} />
                 <TextInput
@@ -58,7 +42,10 @@ const UpdateProduct = () => {
                     onChangeText={setTitle}
                     returnKeyType="next"
                     maxLength={30}
-                    onSubmitEditing={() => priceRef.current?.focus()}
+                    onSubmitEditing={() => {
+                        // focus next field 
+                        //priceRef.current.focus();
+                    }}
                 />
                 {errors.title && <Text style={styles.errorsText}>{errors.title}</Text>}
             </View>
@@ -83,14 +70,18 @@ const UpdateProduct = () => {
                 <Text>Image</Text>
                 <Spacer size={10} />
                 <View style={styles.imageContainer}>
-                    <View style={styles.image}>
-                        <Image source={image ? image : require('../assets/images/noimage.png')} style={styles.image} />
-                        {image && (
-                            <TouchableOpacity style={{ position: 'absolute', top: -5, left: -5 }} onPress={() => setImage(null)}>
-                                <Image source={require('../assets/images/delete.png')} style={{ width: 20, height: 20 }} />
+                    <View style={styles.image} >
+                        {
+                            image &&
+                            <TouchableOpacity style={{ top: 0, left: 0 }} onPress={() => {
+                                setImage(null)
+                            }}>
+                                <Image color="red" source={require('../assets/images/delete.png')} style={{ width: 20, height: 20 }} />
                             </TouchableOpacity>
-                        )}
+                        }
+                        <Image source={image ? image : require('../assets/images/noimage.png')} style={styles.image} />
                     </View>
+
                 </View>
             </View>
             <Spacer size={10} />
@@ -110,6 +101,7 @@ const UpdateProduct = () => {
                 />
             </View>
 
+
             <Spacer size={10} />
 
             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
@@ -122,11 +114,14 @@ const UpdateProduct = () => {
                 <Spacer size={10} horizontal />
                 <Button
                     title="Cancel"
-                    onPress={handleCancel}
+                    onPress={() => {
+
+                    }}
                     style={styles.cancelButtonStyle}
                     textStyle={styles.cancelTextStyle}
                 />
             </View>
+
         </SafeAreaView>
     );
 }
@@ -165,8 +160,7 @@ const styles = StyleSheet.create({
     },
     errorsText: {
         color: 'red',
-        marginTop: 5,
-        fontSize: 12,
+        marginTop: 5
     },
     imageContainer: {
         alignItems: 'center'
@@ -174,8 +168,8 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100,
-        borderRadius: 10
+        boderRadius: 10
     }
-});
+})
 
 export default UpdateProduct;

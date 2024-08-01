@@ -21,7 +21,7 @@ const ProductHome = () => {
                             data={products}
                             renderItem={({ item }) => <ProductItem item={item} onEditPress={() => {
                                 navigateToUpdatePage({
-                                    product: item
+                                    productID: item.id
                                 });
                             }} />}
                             contentContainerStyle={styles.list}

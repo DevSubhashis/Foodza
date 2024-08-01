@@ -50,10 +50,6 @@ const UpdateProductHomeViewModel = () => {
         navigation.navigate('ProductHome');
     }
 
-    const handleCancel = () => {
-        navigation.goBack();
-    }
-
     const handleImagePick = async (type) => {
         const options = {
             mediaType: 'photo',
@@ -66,16 +62,6 @@ const UpdateProductHomeViewModel = () => {
             } else if (result.errorCode) {
                 console.error("Error ", result.errorMessage);
             } else {
-                const fileSize = response.assets[0].fileSize; // file size in bytes
-
-                // Convert file size to MB
-                const fileSizeInMB = fileSize / (1024 * 1024);
-
-                if (fileSizeInMB > 5) {
-                    Alert.alert('File Size Error', 'The selected image is larger than 5 MB. Please select a smaller image.');
-                    return;
-                } 
-
                 const source = { uri: 'data:image/jpeg;base64,' + result.assets[0].base64 }
                 setImage(source);
                 uploadImage();
@@ -107,8 +93,7 @@ const UpdateProductHomeViewModel = () => {
         setErrors,
         priceRef,
         handleSubmit,
-        handleImagePick,
-        handleCancel
+        handleImagePick
     }
 }
 
