@@ -4,23 +4,12 @@ import { SafeAreaView, View, StyleSheet, FlatList } from "react-native";
 import Error from '../component/Error';
 import ProductHomeViewModel from "../screens/ProductHomeViewModel";
 import Header from '../component/Header';
-import { useNavigation } from "@react-navigation/native";
+
 import ProductItem from '../component/ProductItem';
 
 const ProductHome = () => {
-    const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum } = ProductHomeViewModel();
-    const navigate = useNavigation();
+    const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum, navigateToUpdatePage } = ProductHomeViewModel();
 
-
-    const navigateToUpdatePage = () => {
-        navigate.push('UpdateProduct');
-    }
-
-    const onEditPress = (item) => {
-        navigate.push('UpdateProduct', {
-            productID: item.id
-        });
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -31,7 +20,9 @@ const ProductHome = () => {
                         <FlatList
                             data={products}
                             renderItem={({ item }) => <ProductItem item={item} onEditPress={() => {
-                                onEditPress(item);
+                                navigateToUpdatePage({
+                                    productID: item.id
+                                });
                             }} />}
                             contentContainerStyle={styles.list}
                             keyExtractor={item => item.id}

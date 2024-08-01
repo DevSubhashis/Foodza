@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ProductService from "../service/ProductService";
 import { useFocusEffect } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 const ProductHomeViewModel = () => {
     const [products, setProducts] = useState([]);
@@ -11,6 +12,12 @@ const ProductHomeViewModel = () => {
     const offset = useRef(0);
     const limit = 20;
     const onEndReachedCalledDuringMomentum = useRef(true);
+
+    const navigate = useNavigation();
+
+    const navigateToUpdatePage = (payload = {}) => {
+        navigate.push('UpdateProduct', payload);
+    }
 
     const fetchData = async (resetOffset = false) => {
         try {
@@ -30,12 +37,12 @@ const ProductHomeViewModel = () => {
         }
     };
 
-    useFocusEffect( 
+    useFocusEffect(
         React.useCallback(() => {
             fetchData();
         }, [])
     );
-    
+
     const loadMoreData = () => {
         if (!onEndReachedCalledDuringMomentum.current) {
             offset.current = offset.current + limit;
@@ -62,7 +69,8 @@ const ProductHomeViewModel = () => {
         refresh,
         loadMoreData,
         onRefresh,
-        onEndReachedCalledDuringMomentum
+        onEndReachedCalledDuringMomentum,
+        navigateToUpdatePage
     };
 };
 
