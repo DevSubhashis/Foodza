@@ -11,9 +11,9 @@ const ProductItem = ({ item, onEditPress = ()=>{} , onDeletePress = ()=>{} }) =>
             <Text style={styles.price}>${item.price}</Text>
             <Spacer size={5} />
             <View style={{ flexDirection: 'row' }}>
-                <Button title={"Edit"} style={{  width: 80 }} onPress={onEditPress} />
+                <Button title={"Edit"}  onPress={onEditPress} imageSource={require('../assets/images/edit.png')}  />
                 <Spacer size={10} horizontal/>
-                <Button title={"Delete"} style={{ width: 80 }} onPress={onDeletePress}  />
+                <Button title={"Delete"}  styleonPress={onDeletePress} imageSource={require('../assets/images/delete.png')}  />
             </View>
         </View>
     </View>

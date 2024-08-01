@@ -39,7 +39,7 @@ const ProductHomeViewModel = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            fetchData();
+            fetchData(true);
         }, [])
     );
 
