@@ -66,7 +66,7 @@ const UpdateProduct = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header title={productID ? "Edit Product" : "Add Product"} onPress={() => { }} />
+            <Header title={productID ? "Edit Product" : "Add Product"} onPress={() => { }} drawer />
 
             <View style={styles.fieldContainer}>
                 <Text>Title</Text>

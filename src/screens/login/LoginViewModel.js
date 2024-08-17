@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { Alert, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AuthService from "../../service/AuthService";
+import { storeData } from "../../config/utils";
+import { LOGIN_INFO } from "../../constants/Config";
 
 
 const LoginViewModel = () => {
@@ -36,8 +38,8 @@ const LoginViewModel = () => {
         if (handleValidation()) {
             // from submitted
             const loginresponse = await AuthService.doLogin({ username , password });
-            console.log(loginresponse.token);
-            //navigateToListPage();
+            storeData(LOGIN_INFO, { username, token: loginresponse.token });
+            navigateToListPage();
             setShowLoader(false);
         } else {
             Alert.alert("ERROR");
@@ -45,7 +47,7 @@ const LoginViewModel = () => {
     }
 
     const navigateToListPage = () => {
-        navigation.navigate('ProductHome');
+        navigation.navigate('AppInnerStack');
     }
 
     const onSignUpClick = () => {

@@ -1,15 +1,28 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { LOGIN_INFO } from "../../constants/Config";
+import { getData } from "../../config/utils";
 
 const SplashScreen = () => {
     const navigation = useNavigation();
     const DELEAY_VALUE = 2000;
 
-    useEffect(() => {
+    const checkLogin = async () => {
+        const login_info = await getData(LOGIN_INFO);
+        let PAGE_TO_REDIRECT = '';
+        if (login_info) {
+            PAGE_TO_REDIRECT = 'AppInnerStack';
+        } else {
+            PAGE_TO_REDIRECT = 'Login';
+        }
         setTimeout(() => {
-            navigation.navigate('Login');
+            navigation.navigate(PAGE_TO_REDIRECT);
         }, DELEAY_VALUE);
+    }
+
+    useEffect(() => {
+        checkLogin();
     }, []);
 
     return (

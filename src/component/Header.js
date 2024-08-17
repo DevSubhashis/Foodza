@@ -1,10 +1,18 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 
+const Header = ({ title, onPress, addButton, drawer }) => {
 
-const Header = ({ title, onPress, addButton }) => {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.header}>
+            {
+                drawer && <TouchableOpacity onPress={()=>{ navigation.toggleDrawer(); }}>
+                    <Image source={require('./../assets/images/menu.png')} style={{ width: 30, height: 30, tintColor: "red" }}/>
+                </TouchableOpacity>
+            }
             <Text style={styles.title}>{title}</Text>
             {
                 addButton && <TouchableOpacity style={styles.bttn} onPress={onPress}>

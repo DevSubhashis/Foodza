@@ -31,7 +31,7 @@ const ProductHome = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header title={"Product List"} onPress={navigateToUpdatePage} addButton />
+            <Header title={"Product List"} onPress={navigateToUpdatePage} addButton drawer />
             {
                 !error ?
                     <View style={{ flex: 1 }} >
