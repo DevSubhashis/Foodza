@@ -1,10 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { Alert, Linking } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import AuthService from "../../service/AuthService";
 import { storeData , getData } from "../../config/utils";
 import { LOGIN_INFO, BIOMETRIC_INFO } from "../../constants/Config";
 import { checkSupportauthTypes, checkBiometricEnroll, scanBiometric } from '../../service/BiometricAuthService';
+import { useFocusEffect } from "@react-navigation/native";
 
 const LoginViewModel = () => {
 
@@ -16,9 +17,11 @@ const LoginViewModel = () => {
     const [showLoader, setShowLoader] = useState(false);
     const [bioEnrolled, setBioEnrolled] = useState(false);
 
-    useEffect(()=>{
-        checkBioSettings();
-    },[]);
+    useFocusEffect(
+        React.useCallback(() => {
+            checkBioSettings();
+        }, [])
+    );
 
     const checkBioSettings = async () => {
         const result  = await getData(BIOMETRIC_INFO);
@@ -78,6 +81,7 @@ const LoginViewModel = () => {
                 const result = await scanBiometric();
                 if(result.success){
                     storeData(BIOMETRIC_INFO, { isBioMetricEnrolled: true });
+                    navigateToListPage();
                 }
             }
         } else {

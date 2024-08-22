@@ -1,37 +1,35 @@
-import React, { useMemo, useState } from 'react';
-import { SafeAreaView, StyleSheet } from "react-native";
+import React from 'react';
+import { SafeAreaView, StyleSheet, TouchableOpacity, Text } from "react-native";
 import Header from '../../component/Header';
-import RadioGroup from 'react-native-radio-buttons-group';
+import SettingsViewModel from './SettingsViewModel';
+
 
 const Settings = () => {
 
-    const radioButtons = useMemo(() => ([
-        {
-            id: '1', 
-            label: 'Face ID',
-            value: 'faceiD'
-        },
-        {
-            id: '2',
-            label: 'Finger Print',
-            value: 'fingerID'
-        }
-    ]), []);
-
-    const [selectedId, setSelectedId] = useState();
+    const {
+        handleFingerPrint,
+        bioEnrolled,
+        removeFingerPrintEnrollment
+    } = SettingsViewModel();
 
     return (
         <SafeAreaView style={styles.container}>
             <Header title={"Settings"} drawer />
 
-            <RadioGroup
-                radioButtons={radioButtons}
-                onPress={setSelectedId}
-                selectedId={selectedId}
-                containerStyle={{
-                    alignItems: "flex-start"
-                }}
-            />
+            {
+                bioEnrolled ?
+                    <>
+                        <Text style={{ alignSelf: "center", marginTop: 100 }}>Bio Metric Enrolled</Text>
+                        <TouchableOpacity style={styles.fpButton} onPress={removeFingerPrintEnrollment}>
+                            <Text>Remove Fingerprint Enrollment</Text>
+                        </TouchableOpacity>
+                    </>
+                    :
+                    <TouchableOpacity style={styles.fpButton} onPress={handleFingerPrint}>
+                        <Text>Configure Fingerprint</Text>
+                    </TouchableOpacity>
+            }
+
 
         </SafeAreaView>
     );
@@ -40,7 +38,17 @@ const Settings = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5'
+        backgroundColor: '#f5f5f5',
+    },
+    fpButton: {
+        alignItems: "center",
+        justifyContent: 'center',
+        marginTop: 100,
+        borderWidth: 1,
+        padding: 15,
+        width: '75%',
+        alignSelf: "center",
+        borderRadius: 5
     }
 });
 

@@ -1,5 +1,5 @@
 // ProductViewModel.js
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import ProductService from "../service/ProductService";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";

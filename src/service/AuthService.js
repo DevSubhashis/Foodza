@@ -1,4 +1,5 @@
-import { BASE_URL } from '../constants/Config';
+import { removeData } from '../config/utils';
+import { BASE_URL, LOGIN_INFO } from '../constants/Config';
 
 class AuthService {
     static async doLogin() {
@@ -15,6 +16,10 @@ class AuthService {
             console.error('Error fetching products:', error);
             throw error;
         }
+    }
+
+    static async doLogout() {
+        await removeData(LOGIN_INFO);
     }
 }
 
