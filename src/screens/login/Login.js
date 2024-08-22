@@ -1,10 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text, SafeAreaView, TextInput, Image, Pressable } from "react-native";
+import { View, StyleSheet, Text, SafeAreaView, TextInput, Image, Pressable, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Spacer from "../../component/Spacer";
 import Button from "../../component/Button";
 import LoginViewModel from "./LoginViewModel";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import Constants from 'expo-constants';
 
 const Login = () => {
     const navigation = useNavigation();
@@ -19,7 +20,9 @@ const Login = () => {
         passwordRef,
         handleSubmit,
         onSignUpClick,
-        showLoader
+        showLoader,
+        handleFingerPrint,
+        bioEnrolled
     } = LoginViewModel();
 
     return (
@@ -62,10 +65,6 @@ const Login = () => {
                         maxLength={30}
                         secureTextEntry={true}
                         ref={passwordRef}
-                        onSubmitEditing={() => {
-                            // focus next field 
-                            // priceRef.current.focus();
-                        }}
                     />
                     <Spacer size={5} />
                     {errors.password && <Text style={styles.errorsText}>{errors.password}</Text>}
@@ -76,8 +75,21 @@ const Login = () => {
                     style={{ margin: 20, borderRadius: 10 }}
                     onPress={handleSubmit}
                 />
+                <Spacer size={7} />
+
+                {bioEnrolled && <>
+                    <Text style={{ alignSelf: "center" }}>---OR---</Text>
+                    <Spacer size={7} />
+                    <Button
+                        title={"Login with Fingerprint"}
+                        style={{ margin: 20, borderRadius: 10 }}
+                        onPress={handleFingerPrint}
+                        imageSource={require('../../assets/images/fingerprint.jpg')}
+                    />
+                </>}
+                <Spacer size={15} />
                 <Pressable onPress={onSignUpClick} style={{ alignSelf: "center" }}>
-                    <Text style={{ textDecorationLine: "underline",color: "blue" }}>Sign Up</Text>
+                    <Text style={{ textDecorationLine: "underline", color: "blue" }}>Sign Up</Text>
                 </Pressable>
             </KeyboardAwareScrollView>
         </SafeAreaView>
@@ -99,8 +111,8 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     image: {
-        width: 300,
-        height: 300,
+        width: 150,
+        height: 150,
         backgroundColor: "#fff",
         alignSelf: "center"
     },
