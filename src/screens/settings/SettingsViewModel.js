@@ -1,10 +1,8 @@
-import { useRef, useState, useEffect } from "react";
-import { Alert, Linking } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import AuthService from "../../service/AuthService";
+import { useState, useEffect } from "react";
+import { Alert } from "react-native";
 import { storeData, getData, removeData } from "../../config/utils";
-import { LOGIN_INFO, BIOMETRIC_INFO } from "../../constants/Config";
-import { checkSupportauthTypes, checkBiometricEnroll, scanBiometric } from '../../service/BiometricAuthService';
+import { BIOMETRIC_INFO } from "../../constants/Config";
+import { checkSupportauthTypes, scanBiometric } from '../../service/BiometricAuthService';
 
 const SettingsViewModel = () => {
 

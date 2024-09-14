@@ -9,7 +9,7 @@ const Settings = () => {
     const {
         handleFingerPrint,
         bioEnrolled,
-        removeFingerPrintEnrollment
+        removeFingerPrintEnrollment,
     } = SettingsViewModel();
 
     return (
@@ -29,7 +29,7 @@ const Settings = () => {
                         <Text>Configure Fingerprint</Text>
                     </TouchableOpacity>
             }
-
+        
 
         </SafeAreaView>
     );

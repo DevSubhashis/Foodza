@@ -10,6 +10,7 @@ import SplashScreen from "./src/screens/splash/SplashScreen";
 import Login from "./src/screens/login/Login";
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import Settings from './src/screens/settings/Settings';
+import ScannerView from './src/screens/scanner/ScannerView';
 import AuthService from './src/service/AuthService';
 
 const Stack = createStackNavigator();
@@ -55,6 +56,14 @@ const AppInnerStack = () => {
                                 focused={focused === 'Settings'}
                             />
 
+                            <DrawerItem
+                                label="Scanner"
+                                onPress={() => {
+                                    props.navigation.navigate('Scanner');
+                                }}
+                                focused={focused === 'Scanner'}
+                            />
+
                         </DrawerContentScrollView>
                         <DrawerItem
                             label="Logout"
@@ -71,6 +80,7 @@ const AppInnerStack = () => {
             <Drawer.Screen name="Home" component={ProductHome} options={{ headerShown: false }} />
             <Drawer.Screen name="AddProduct" component={UpdateProduct} options={{ headerShown: false }} />
             <Drawer.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+            <Drawer.Screen name="Scanner" component={ScannerView} options={{ headerShown: false }} />
         </Drawer.Navigator>
     );
 }
