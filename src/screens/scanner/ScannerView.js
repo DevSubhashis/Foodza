@@ -1,70 +1,62 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, TouchableOpacity, Text, View } from "react-native";
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import Header from '../../component/Header';
 import ScannerViewModel from './ScannerViewModel';
+import { Camera } from 'react-native-vision-camera';
+import Spacer from '../../component/Spacer';
 
 
 const ScannerView = () => {
 
     const {
-        handleScanner,
         scanInfo,
-        isCameraOpen,
-        facing,
-        permission,
-        requestPermission,
-        setIsCameraOpen,
-        setScanInfo
+        setScanInfo,
+        showCamera,
+        device,
+        camera,
+        codeScanner,
+        setShowCamera
     } = ScannerViewModel();
 
-    // if (!permission) {
-    //     // Camera permissions are still loading.
-    //     return <View />;
-    // }
-
-    // if (!permission.granted) {
-    //     // Camera permissions are not granted yet.
-    //     return (
-    //         <View style={styles.container}>
-    //             <Text style={styles.message}>We need your permission to show the camera</Text>
-    //             <Button onPress={requestPermission} title="grant permission" />
-    //         </View>
-    //     );
-    // }
+    if (device == null) {
+        return <Text style={styles.message}>Camera not available</Text>;
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <Header title={"Scan"} drawer />
+
+            <View style={styles.cameraContainer}>
+                {
+                    showCamera &&
+                    <Camera
+                        ref={camera}
+                        style={{ width: "100%", height: "100%" }}
+                        device={device}
+                        isActive={true}
+                        codeScanner={codeScanner}
+                    // photo={true}
+                    />
+                }
+            </View>
+
             {
-                !isCameraOpen && <TouchableOpacity style={styles.fpButton} onPress={requestPermission}>
+                scanInfo &&
+                <View style={styles.scannedSection}>
+                    <Text style={styles.scannedText}>Scanned Data</Text>
+                    <Text style={styles.scannedText}>{scanInfo}</Text>
+                </View>
+            }
+            {
+                !showCamera && <TouchableOpacity style={styles.fpButton} onPress={() => {
+                    setScanInfo(null);
+                    setShowCamera(true)
+                }}>
                     <Text>Scan</Text>
                 </TouchableOpacity>
             }
 
-            {
-                isCameraOpen &&
-                <CameraView
-                    style={styles.camera} facing={facing}
-                    onCameraReady={() => {
-                        setIsCameraOpen(true);
-                    }}
-                    barcodeScannerSettings={{
-                        barcodeTypes: ['aztec' | 'ean13' | 'ean8' | 'qr' | 'pdf417' | 'upc_e' | 'datamatrix' | 'code39' | 'code93' | 'itf14' | 'codabar' | 'code128' | 'upc_a'],
-                    }}
-                    onBarcodeScanned={(result)=>{
-                        console.log(result.data);
-                        console.log(result.type);
-                        setScanInfo(result.data);
-                    }}
-                >
 
-                </CameraView>
-            }
-
-            {
-                scanInfo && <Text>scanInfo</Text>
-            }
         </SafeAreaView>
     );
 }
@@ -89,8 +81,24 @@ const styles = StyleSheet.create({
     },
     message: {
         textAlign: 'center',
-        paddingBottom: 10,
     },
+    scannedText: {
+        textAlign: 'left'
+    },
+    cameraContainer: {
+        height: 200, 
+        width: 200, 
+        alignSelf: 'center', 
+        backgroundColor: '#000'
+
+    },
+    scannedSection: {
+        width: "80%", 
+        borderWidth: 1, 
+        borderColor: "#000", 
+        padding: 15,  
+        alignSelf: 'center'
+    }
 });
 
 export default ScannerView;
