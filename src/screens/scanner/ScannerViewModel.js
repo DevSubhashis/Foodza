@@ -7,6 +7,7 @@ const ScannerViewModel = () => {
 
     const device = useCameraDevice('back');
     const [scanInfo, setScanInfo] = useState(null);
+    const [scanImageUrl, setScanImageUrl] = useState(null);
     const [showCamera, setShowCamera] = useState(false);
     const camera = useRef(null);
 
@@ -26,19 +27,20 @@ const ScannerViewModel = () => {
             console.log(codes[0].type);
             console.log(codes[0].value);
             setScanInfo(codes[0].value);
-            //doTakePicture();
-            setShowCamera(false);
+            doTakePicture();
+            // setShowCamera(false);
         }
     })
 
 
-    // const doTakePicture = async () => {
-    //     if (camera.current !== null) {
-    //         const photo = await camera.current.takePhoto({});
-    //         console.log(photo.path);
-    //         setShowCamera(false);
-    //     }
-    // }
+    const doTakePicture = async () => {
+        if (camera.current !== null) {
+            const photo = await camera.current.takeSnapshot();
+            console.log(photo.path);
+            setScanImageUrl(photo.path);
+            setShowCamera(false);
+        }
+    }
 
     return {
         scanInfo,
@@ -47,7 +49,9 @@ const ScannerViewModel = () => {
         device,
         camera,
         codeScanner,
-        setShowCamera
+        setShowCamera,
+        scanImageUrl,
+        setScanImageUrl
     }
 }
 

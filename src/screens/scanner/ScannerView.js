@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, TouchableOpacity, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, TouchableOpacity, Text, View, Image } from "react-native";
 import Header from '../../component/Header';
 import ScannerViewModel from './ScannerViewModel';
 import { Camera } from 'react-native-vision-camera';
@@ -15,7 +15,9 @@ const ScannerView = () => {
         device,
         camera,
         codeScanner,
-        setShowCamera
+        setShowCamera,
+        scanImageUrl,
+        setScanImageUrl
     } = ScannerViewModel();
 
     if (device == null) {
@@ -25,7 +27,7 @@ const ScannerView = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Header title={"Scan"} drawer />
-
+            <Spacer size={50} />
             <View style={styles.cameraContainer}>
                 {
                     showCamera &&
@@ -35,25 +37,42 @@ const ScannerView = () => {
                         device={device}
                         isActive={true}
                         codeScanner={codeScanner}
-                    // photo={true}
+                        photo={true}
                     />
                 }
+
+                {scanImageUrl && (
+                    <Image
+                        source={{ uri: 'file://'+scanImageUrl }}
+                        style={{ width: "100%", height: "100%" }}
+                    />
+                )}
+
             </View>
 
             {
                 scanInfo &&
-                <View style={styles.scannedSection}>
+                <>
+                    <Spacer size={30} />
                     <Text style={styles.scannedText}>Scanned Data</Text>
-                    <Text style={styles.scannedText}>{scanInfo}</Text>
-                </View>
+                    <Spacer size={10} />
+                    <View style={styles.scannedSection}>
+                        <Text style={styles.scannedText}>{scanInfo}</Text>
+                    </View>
+                </>
             }
             {
-                !showCamera && <TouchableOpacity style={styles.fpButton} onPress={() => {
-                    setScanInfo(null);
-                    setShowCamera(true)
-                }}>
-                    <Text>Scan</Text>
-                </TouchableOpacity>
+                !showCamera &&
+                <>
+                    <Spacer size={20} />
+                    <TouchableOpacity style={styles.fpButton} onPress={() => {
+                        setScanImageUrl(null);
+                        setScanInfo(null);
+                        setShowCamera(true)
+                    }}>
+                        <Text>Scan</Text>
+                    </TouchableOpacity>
+                </>
             }
 
 
@@ -69,7 +88,6 @@ const styles = StyleSheet.create({
     fpButton: {
         alignItems: "center",
         justifyContent: 'center',
-        marginTop: 100,
         borderWidth: 1,
         padding: 15,
         width: '75%',
@@ -83,21 +101,23 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     scannedText: {
-        textAlign: 'left'
+        textAlign: 'left',
+        marginLeft: 15
     },
     cameraContainer: {
-        height: 200, 
-        width: 200, 
-        alignSelf: 'center', 
+        height: 200,
+        width: 200,
+        alignSelf: 'center',
         backgroundColor: '#000'
 
     },
     scannedSection: {
-        width: "80%", 
-        borderWidth: 1, 
-        borderColor: "#000", 
-        padding: 15,  
-        alignSelf: 'center'
+        width: "95%",
+        borderColor: "#000",
+        padding: 15,
+        alignSelf: "center",
+        backgroundColor: "#EDEADE",
+        borderRadius: 5
     }
 });
 
