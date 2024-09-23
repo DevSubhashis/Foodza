@@ -1,14 +1,25 @@
 // ProductHome.js
 import React from "react";
-import { SafeAreaView, View, StyleSheet, FlatList, Alert } from "react-native";
+import { SafeAreaView, View, StyleSheet, FlatList, Alert, TouchableOpacity, Text } from "react-native";
 import Error from '../component/Error';
 import ProductHomeViewModel from "../screens/ProductHomeViewModel";
 import Header from '../component/Header';
-
+import FilterModal from "../component/FilterModal";
 import ProductItem from '../component/ProductItem';
 
 const ProductHome = () => {
-    const { products, error, refresh, loadMoreData, onRefresh, onEndReachedCalledDuringMomentum, navigateToUpdatePage } = ProductHomeViewModel();
+    const {
+        products,
+        error,
+        refresh,
+        loadMoreData,
+        onRefresh,
+        onEndReachedCalledDuringMomentum,
+        navigateToUpdatePage,
+        setFilterModalVisible,
+        filterModalVisible,
+        handleApplyFilters
+    } = ProductHomeViewModel();
 
     const showAlertConfrimation = () =>
         Alert.alert(
@@ -23,7 +34,7 @@ const ProductHome = () => {
                 {
                     text: 'OK',
                     onPress: () => {
-                        
+
                     },
                 }
             ]
@@ -32,6 +43,9 @@ const ProductHome = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Header title={"Product List"} onPress={navigateToUpdatePage} addButton drawer />
+            <TouchableOpacity onPress={() => setFilterModalVisible(true)}>
+                <Text>Filter</Text>
+            </TouchableOpacity>
             {
                 !error ?
                     <View style={{ flex: 1 }} >
@@ -64,6 +78,13 @@ const ProductHome = () => {
                     :
                     <Error errorMessage={error} />
             }
+
+            <FilterModal
+                visible={filterModalVisible}
+                onClose={() => setFilterModalVisible(false)}
+                onApply={handleApplyFilters}
+            />
+
         </SafeAreaView>
     );
 }

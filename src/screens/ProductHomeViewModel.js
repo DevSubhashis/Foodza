@@ -1,5 +1,5 @@
 // ProductViewModel.js
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ProductService from "../service/ProductService";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +8,8 @@ const ProductHomeViewModel = () => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(false);
+    const [filterModalVisible, setFilterModalVisible] = useState(false);
+    // const [filters, setFilters] = useState({});
 
     const offset = useRef(0);
     const limit = 20;
@@ -19,12 +21,12 @@ const ProductHomeViewModel = () => {
         navigate.push('UpdateProduct', payload);
     }
 
-    const fetchData = async (resetOffset = false) => {
+    const fetchData = async (resetOffset = false, payload = {}) => {
         try {
             if (resetOffset) {
                 offset.current = 0;
             }
-            const fetchedProducts = await ProductService.fetchProducts(offset.current, limit);
+            const fetchedProducts = await ProductService.fetchProducts(offset.current, limit, payload);
             if (resetOffset) {
                 setProducts(fetchedProducts);
             } else {
@@ -37,11 +39,34 @@ const ProductHomeViewModel = () => {
         }
     };
 
+    // useEffect(() => {
+    //     doFilter();
+    // }, [filters]);
+
     useFocusEffect(
         React.useCallback(() => {
             fetchData(true);
         }, [])
     );
+
+    // const doFilter = () => {
+    //     if(filters.length == 0){
+    //         return;
+    //     }
+    //     const newItems = products.filter(product => {
+    //         const titleMatch = product.title.toLowerCase().includes(filters.title.toLowerCase());
+    //         const dateMatch = new Date(product.expired_date) >= new Date(filters.expiredDate);
+    //         const sizeMatch = filters.size ? product.size === filters.size : true;
+    //         const originMatch = product.product_origin === filters.origin;
+    //         const categoryMatch = Object.keys(filters.categories).length === 0 ||
+    //             filters.categories[product.category];
+    //         const priceMatch = product.price >= filters.priceRange[0] &&
+    //             product.price <= filters.priceRange[1];
+
+    //         return titleMatch && dateMatch && sizeMatch && originMatch && categoryMatch && priceMatch;
+    //     });
+    //     setProducts(newItems);
+    // }
 
     const loadMoreData = () => {
         if (!onEndReachedCalledDuringMomentum.current) {
@@ -63,6 +88,19 @@ const ProductHomeViewModel = () => {
         }
     };
 
+    const handleApplyFilters = (newFilters) => {
+        //setFilters(newFilters);
+        console.log(newFilters);
+        // {
+        //     "categories": ["Electronics", "Clothing", "Books"], 
+        //     "origin": "non-indian", 
+        //     "searchText": "Sdsds", 
+        //     "size": "medium", 
+        //     "expiredDate": 2024-09-24T19:27:00.000Z
+        // }
+        fetchData(true, newFilters);
+    };
+
     return {
         products,
         error,
@@ -70,7 +108,10 @@ const ProductHomeViewModel = () => {
         loadMoreData,
         onRefresh,
         onEndReachedCalledDuringMomentum,
-        navigateToUpdatePage
+        navigateToUpdatePage,
+        setFilterModalVisible,
+        filterModalVisible,
+        handleApplyFilters
     };
 };
 

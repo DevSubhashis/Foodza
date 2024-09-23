@@ -2,7 +2,7 @@ import { BASE_URL } from '../constants/Config';
 //import ProductModel from '../models/ProductModel';
 
 class ProductService {
-  static async fetchProducts(offset = 0, limit = 0) {
+  static async fetchProducts(offset = 0, limit = 0, payload = {}) {
     try {
       const URL = `${BASE_URL}/products?offset=${offset}&limit=${limit}`;
       console.log(URL);
