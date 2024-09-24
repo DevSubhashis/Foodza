@@ -6,6 +6,8 @@ import ProductHomeViewModel from "../screens/ProductHomeViewModel";
 import Header from '../component/Header';
 import FilterModal from "../component/FilterModal";
 import ProductItem from '../component/ProductItem';
+import { Badge } from 'react-native-elements'
+import AntDesignIcons from 'react-native-vector-icons/AntDesign';
 
 const ProductHome = () => {
     const {
@@ -18,7 +20,8 @@ const ProductHome = () => {
         navigateToUpdatePage,
         setFilterModalVisible,
         filterModalVisible,
-        handleApplyFilters
+        handleApplyFilters,
+        numberOfFilters
     } = ProductHomeViewModel();
 
     const showAlertConfrimation = () =>
@@ -43,9 +46,13 @@ const ProductHome = () => {
     return (
         <SafeAreaView style={styles.container}>
             <Header title={"Product List"} onPress={navigateToUpdatePage} addButton drawer />
-            <TouchableOpacity onPress={() => setFilterModalVisible(true)}>
-                <Text>Filter</Text>
-            </TouchableOpacity>
+            <View style={{ height: 50, width: '100%' }}>
+                <TouchableOpacity style={{ alignSelf: "flex-end", paddingRight: 10, marginTop: 10, marginBottom: 10 }}  onPress={() => setFilterModalVisible(true)}>
+                    { numberOfFilters != 0 ? <Badge value={numberOfFilters} /> : null }
+                    <AntDesignIcons name="filter" size={20}/>
+                </TouchableOpacity>
+            </View>
+
             {
                 !error ?
                     <View style={{ flex: 1 }} >

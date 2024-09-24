@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Modal, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Modal, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
 import { CheckBox, Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { RadioButton } from 'react-native-paper';
-
+import AntDesignIcons from 'react-native-vector-icons/AntDesign';
 
 const FilterModal = ({ visible, onClose, onApply }) => {
   const [searchText, setSearchText] = useState('');
@@ -46,59 +46,64 @@ const FilterModal = ({ visible, onClose, onApply }) => {
 
   return (
     <Modal visible={visible} transparent={true} animationType='slide'>
-      <ScrollView>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.title}>Filters</Text>
+      <SafeAreaView>
+        <ScrollView>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.title}>Filters</Text>
 
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Search products"
-              value={searchText}
-              onChangeText={setSearchText}
-            />
+              <TouchableOpacity style={{ position: 'absolute', right: 30, top: 30 }} onPress={onClose}>
+                <AntDesignIcons name="closecircle" size={20} />
+              </TouchableOpacity>
 
-            <Text style={styles.label}>Expiry Date</Text>
-            <DateTimePicker
-              value={startDate}
-              mode="date"
-              display="default"
-              onChange={(event, selectedDate) => {
-                setStartDate(selectedDate || startDate)
-                setExpiredDate(selectedDate);
-              }}
-            />
-
-            <Text style={styles.label}>Size</Text>
-            <DropDownPicker
-              open={openSize}
-              value={size}
-              items={sizes}
-              setOpen={setOpenSize}
-              setValue={setSize}
-              setItems={setSizes}
-              style={styles.dropdown}
-            />
-
-            <Text style={styles.label}>Origin</Text>
-            <RadioButton.Group onValueChange={value => setOrigin(value)} value={origin}>
-              <View style={styles.radioGroup}>
-                <RadioButton.Item label="Indian" value="indian" />
-                <RadioButton.Item label="Non-Indian" value="non-indian" />
-              </View>
-            </RadioButton.Group>
-
-            <Text style={styles.label}>Categories</Text>
-            {['Electronics', 'Clothing', 'Books', 'Home'].map((category) => (
-              <CheckBox
-                key={category}
-                title={category}
-                checked={categories[category] || false}
-                onPress={() => setCategories({ ...categories, [category]: !categories[category] })}
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search products"
+                value={searchText}
+                onChangeText={setSearchText}
               />
-            ))}
 
-            {/* <Text style={styles.label}>Price Range</Text>
+              <Text style={styles.label}>Expiry Date</Text>
+              <DateTimePicker
+                value={startDate}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) => {
+                  setStartDate(selectedDate || startDate)
+                  setExpiredDate(selectedDate);
+                }}
+              />
+
+              <Text style={styles.label}>Size</Text>
+              <DropDownPicker
+                open={openSize}
+                value={size}
+                items={sizes}
+                setOpen={setOpenSize}
+                setValue={setSize}
+                setItems={setSizes}
+                style={styles.dropdown}
+              />
+
+              <Text style={styles.label}>Origin</Text>
+              <RadioButton.Group onValueChange={value => setOrigin(value)} value={origin}>
+                <View style={styles.radioGroup}>
+                  <RadioButton.Item label="Indian" value="indian" />
+                  <RadioButton.Item label="Non-Indian" value="non-indian" />
+                </View>
+              </RadioButton.Group>
+
+              <Text style={styles.label}>Categories</Text>
+              {['Electronics', 'Clothing', 'Books', 'Home'].map((category) => (
+                <CheckBox
+                  key={category}
+                  title={category}
+                  checked={categories[category] || false}
+                  onPress={() => setCategories({ ...categories, [category]: !categories[category] })}
+                />
+              ))}
+
+              {/* <Text style={styles.label}>Price Range</Text>
           <Slider
             value={priceRange}
             onValueChange={setPriceRange}
@@ -111,17 +116,18 @@ const FilterModal = ({ visible, onClose, onApply }) => {
           />
           <Text>{`$${priceRange[0]} - $${priceRange[1]}`}</Text> */}
 
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.clearButton} onPress={handleClearAll}>
-                <Text style={styles.buttonText}>Clear All</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-                <Text style={styles.buttonText}>Apply Filters</Text>
-              </TouchableOpacity>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.clearButton} onPress={handleClearAll}>
+                  <Text style={styles.buttonText}>Clear All</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
+                  <Text style={styles.buttonText}>Apply Filters</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </SafeAreaView>
     </Modal>
   );
 };

@@ -10,6 +10,7 @@ const ProductHomeViewModel = () => {
     const [refresh, setRefresh] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
     // const [filters, setFilters] = useState({});
+    const [numberOfFilters, setNumberOfFilters] = useState(0);
 
     const offset = useRef(0);
     const limit = 20;
@@ -49,7 +50,7 @@ const ProductHomeViewModel = () => {
         }, [])
     );
 
-    // const doFilter = () => {
+    // const doFilter = () => { // FOR LOCAL FILTER
     //     if(filters.length == 0){
     //         return;
     //     }
@@ -98,8 +99,32 @@ const ProductHomeViewModel = () => {
         //     "size": "medium", 
         //     "expiredDate": 2024-09-24T19:27:00.000Z
         // }
+        countFilters(newFilters);
         fetchData(true, newFilters);
     };
+
+    const countFilters = (filters) => {
+        let count = 0;
+    
+        // Check if each filter is applied
+        if (filters.categories && filters.categories.length > 0) {
+            count++;
+        }
+        if (filters.expiredDate) {
+            count++;
+        }
+        if (filters.origin) {
+            count++;
+        }
+        if (filters.searchText && filters.searchText.trim() !== "") {
+            count++;
+        }
+        if (filters.size) {
+            count++;
+        }
+    
+        setNumberOfFilters(count);
+    }
 
     return {
         products,
@@ -111,7 +136,8 @@ const ProductHomeViewModel = () => {
         navigateToUpdatePage,
         setFilterModalVisible,
         filterModalVisible,
-        handleApplyFilters
+        handleApplyFilters,
+        numberOfFilters
     };
 };
 
