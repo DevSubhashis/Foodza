@@ -12,6 +12,8 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@rea
 import Settings from './src/screens/settings/Settings';
 import ScannerView from './src/screens/scanner/ScannerView';
 import AuthService from './src/service/AuthService';
+import { ProductProvider } from './src/context/ProductContext';
+import Loader from './src/component/Loader';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -87,15 +89,19 @@ const AppInnerStack = () => {
 
 const App = () => {
     return (
-        <NavigationContainer>
-            <Stack.Navigator initialRouteName="SplashScreen">
-                <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-                <Stack.Screen name="AppInnerStack" component={AppInnerStack} options={{ headerShown: false }} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <ProductProvider>
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="SplashScreen">
+                    <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
+                    <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+                    <Stack.Screen name="AppInnerStack" component={AppInnerStack} options={{ headerShown: false }} />
+                </Stack.Navigator>
+            </NavigationContainer>
+            <Loader />
+        </ProductProvider>
     )
 }
+
 
 
 

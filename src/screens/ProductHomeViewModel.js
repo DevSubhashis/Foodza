@@ -3,13 +3,15 @@ import React, { useState, useRef, useEffect } from "react";
 import ProductService from "../service/ProductService";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import { appCtrl } from "../service/AppCtrl";
+
 
 const ProductHomeViewModel = () => {
     const [products, setProducts] = useState([]);
     const [error, setError] = useState(null);
     const [refresh, setRefresh] = useState(false);
     const [filterModalVisible, setFilterModalVisible] = useState(false);
-    // const [filters, setFilters] = useState({});
+    //const [filters, setFilters] = useState({});
     const [numberOfFilters, setNumberOfFilters] = useState(0);
 
     const offset = useRef(0);
@@ -46,7 +48,7 @@ const ProductHomeViewModel = () => {
 
     useFocusEffect(
         React.useCallback(() => {
-            fetchData(true);
+            fetchData(true, appCtrl.filterObject);
         }, [])
     );
 
@@ -90,6 +92,7 @@ const ProductHomeViewModel = () => {
     };
 
     const handleApplyFilters = (newFilters) => {
+        appCtrl.filterObject = newFilters;
         //setFilters(newFilters);
         console.log(newFilters);
         // {

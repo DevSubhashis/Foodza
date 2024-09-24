@@ -6,7 +6,6 @@ import Spacer from '../component/Spacer';
 import Button from '../component/Button';
 import UpdateProductHomeViewModel from './UpdateProductHomeViewModel';
 import { useRoute } from '@react-navigation/native';
-import Loader from '../component/Loader';
 
 const UpdateProduct = () => {
     const route = useRoute();
@@ -23,7 +22,6 @@ const UpdateProduct = () => {
         handleSubmit,
         handleImagePick,
         handleCancel,
-        showLoader
     } = UpdateProductHomeViewModel();
 
     const {
@@ -157,7 +155,7 @@ const UpdateProduct = () => {
                     textStyle={styles.cancelTextStyle}
                 />
             </View>
-            <Loader visible={showLoader} />
+
         </SafeAreaView>
     );
 }

@@ -6,6 +6,7 @@ import { storeData , getData } from "../../config/utils";
 import { LOGIN_INFO, BIOMETRIC_INFO } from "../../constants/Config";
 import { checkSupportauthTypes, checkBiometricEnroll, scanBiometric } from '../../service/BiometricAuthService';
 import { useFocusEffect } from "@react-navigation/native";
+import { useProductContext } from "../../context/ProductContext";
 
 const LoginViewModel = () => {
 
@@ -14,8 +15,9 @@ const LoginViewModel = () => {
     const [errors, setErrors] = useState({});
     const passwordRef = useRef(null);
     const navigation = useNavigation();
-    const [showLoader, setShowLoader] = useState(false);
     const [bioEnrolled, setBioEnrolled] = useState(false);
+
+    const { setLoader } = useProductContext();
 
     useFocusEffect(
         React.useCallback(() => {
@@ -51,13 +53,13 @@ const LoginViewModel = () => {
     }
 
     const handleSubmit = async () => {
-        setShowLoader(true);
+        setLoader(true);
         if (handleValidation()) {
             // from submitted
             const loginresponse = await AuthService.doLogin({ username , password });
             storeData(LOGIN_INFO, { username, token: loginresponse.token });
             navigateToListPage();
-            setShowLoader(false);
+            setLoader(false);
         } else {
             Alert.alert("ERROR");
         }
@@ -99,7 +101,6 @@ const LoginViewModel = () => {
         passwordRef,
         handleSubmit,
         onSignUpClick,
-        showLoader,
         handleFingerPrint,
         bioEnrolled
     }

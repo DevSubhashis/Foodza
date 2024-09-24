@@ -3,6 +3,7 @@ import { Alert } from "react-native";
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ProductService from "../service/ProductService";
 import { useNavigation } from "@react-navigation/native";
+import { useProductContext } from "../context/ProductContext";
 
 const UpdateProductHomeViewModel = () => {
 
@@ -12,7 +13,8 @@ const UpdateProductHomeViewModel = () => {
     const [errors, setErrors] = useState({});
     const priceRef = useRef(null);
     const navigation = useNavigation();
-    const [showLoader, setShowLoader] = useState(false);
+
+    const { setLoader } = useProductContext();
 
     const handleValidation = () => {
         let valid = true;
@@ -33,7 +35,7 @@ const UpdateProductHomeViewModel = () => {
     }
 
     const handleSubmit = async () => {
-        setShowLoader(true);
+        setLoader(true);
         if (handleValidation()) {
             // from submitted
             const addProduct = await ProductService.addProduct({
@@ -43,7 +45,7 @@ const UpdateProductHomeViewModel = () => {
             });
             console.log(addProduct); // addProduct.id
             navigateToListPage();
-            setShowLoader(false);
+            setLoader(false);
         } else {
             Alert.alert("ERROR");
         }
@@ -111,8 +113,7 @@ const UpdateProductHomeViewModel = () => {
         priceRef,
         handleSubmit,
         handleImagePick,
-        handleCancel,
-        showLoader
+        handleCancel
     }
 }
 

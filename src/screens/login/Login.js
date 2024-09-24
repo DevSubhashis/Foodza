@@ -20,7 +20,6 @@ const Login = () => {
         passwordRef,
         handleSubmit,
         onSignUpClick,
-        showLoader,
         handleFingerPrint,
         bioEnrolled
     } = LoginViewModel();

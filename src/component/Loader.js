@@ -1,10 +1,13 @@
 import React from "react";
 import { StyleSheet, View, Image } from "react-native";
+import { useProductContext } from '../context/ProductContext';
 
-const Loader = ({ visible = false }) => {
+const Loader = () => {
+
+    const { loader } = useProductContext();
 
     return (
-        visible && <View style={styles.container}>
+        loader && <View style={styles.container}>
             <Image 
                 source={require('../assets/images/Loading.gif')}
                 style={{ width: 120, height: 120, backgroundColor: 'transparent' }}

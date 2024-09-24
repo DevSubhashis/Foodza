@@ -8,8 +8,10 @@ import FilterModal from "../component/FilterModal";
 import ProductItem from '../component/ProductItem';
 import { Badge } from 'react-native-elements'
 import AntDesignIcons from 'react-native-vector-icons/AntDesign';
+import { useProductContext } from '../context/ProductContext';
 
 const ProductHome = () => {
+
     const {
         products,
         error,
@@ -23,6 +25,8 @@ const ProductHome = () => {
         handleApplyFilters,
         numberOfFilters
     } = ProductHomeViewModel();
+
+    const { user, setUser } = useProductContext();
 
     const showAlertConfrimation = () =>
         Alert.alert(
@@ -47,15 +51,19 @@ const ProductHome = () => {
         <SafeAreaView style={styles.container}>
             <Header title={"Product List"} onPress={navigateToUpdatePage} addButton drawer />
             <View style={{ height: 50, width: '100%' }}>
-                <TouchableOpacity style={{ alignSelf: "flex-end", paddingRight: 10, marginTop: 10, marginBottom: 10 }}  onPress={() => setFilterModalVisible(true)}>
-                    { numberOfFilters != 0 ? <Badge value={numberOfFilters} /> : null }
-                    <AntDesignIcons name="filter" size={20}/>
+                <TouchableOpacity style={{ alignSelf: "flex-end", paddingRight: 10, marginTop: 10, marginBottom: 10 }}
+                    //onPress={() => setFilterModalVisible(true)}
+                    onPress={() => setUser("Subhashis")}
+                >
+                    {numberOfFilters != 0 ? <Badge value={numberOfFilters} /> : null}
+                    <AntDesignIcons name="filter" size={20} />
                 </TouchableOpacity>
             </View>
 
             {
                 !error ?
                     <View style={{ flex: 1 }} >
+                        <Text>{user}</Text>
                         <FlatList
                             data={products}
                             renderItem={({ item }) => <ProductItem item={item}
