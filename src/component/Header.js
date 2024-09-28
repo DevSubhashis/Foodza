@@ -1,21 +1,29 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import { useAppStore } from "../Store";
 
 const Header = ({ title, onPress, addButton, drawer }) => {
 
     const navigation = useNavigation();
+    const { getBackgroudColor, setHeaderBackgroundColor } = useAppStore((state) => state)
 
     return (
-        <View style={styles.header}>
+        <View style={[styles.header, { backgroundColor: getBackgroudColor() }]}>
             {
-                drawer && <TouchableOpacity onPress={()=>{ navigation.toggleDrawer(); }}>
-                    <Image source={require('./../assets/images/menu.png')} style={{ width: 30, height: 30, tintColor: "red" }}/>
+                drawer && <TouchableOpacity onPress={() => { navigation.toggleDrawer(); }}>
+                    <Image source={require('./../assets/images/menu.png')} style={{ width: 30, height: 30, tintColor: "red" }} />
                 </TouchableOpacity>
             }
             <Text style={styles.title}>{title}</Text>
             {
-                addButton && <TouchableOpacity style={styles.bttn} onPress={onPress}>
+                addButton && <TouchableOpacity
+                    style={styles.bttn}
+                //onPress={onPress}
+                onPress={()=>{
+                    setHeaderBackgroundColor('red')
+                }}
+                >
                     <Text style={styles.bttnText}>Add</Text>
                 </TouchableOpacity>
             }
@@ -27,7 +35,6 @@ const Header = ({ title, onPress, addButton, drawer }) => {
 const styles = StyleSheet.create({
     header: {
         height: 60,
-        backgroundColor: '#6200ee',
         justifyContent: 'space-between',
         alignItems: "center",
         flexDirection: 'row',
